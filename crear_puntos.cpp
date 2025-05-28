@@ -41,10 +41,10 @@ void CrearPuntos::setX(int x)   { X = x;   }
 #include <algorithm>   // std::min
 
 struct Punto {
-    double x;
-    double y;
+    uint64_t x;
+    uint64_t y;
 
-    double distancia(const Punto& otro) const {
+    uint64_t distancia(const Punto& otro) const {
         return std::sqrt((x - otro.x) * (x - otro.x) + (y - otro.y) * (y - otro.y));
     }
 };
@@ -52,7 +52,7 @@ struct Punto {
 struct InfoEntrePuntos {
     Punto p1;
     Punto p2;
-    double distancia;
+    uint64_t distancia;
 };
 
 struct Comparador {
@@ -91,8 +91,8 @@ int CrearPuntos::CrearPuntosNArreglo() const
     }
     std::vector<Punto> puntos(N);
     std::mt19937_64 rng{ std::random_device{}() };
-    std::uniform_real_distribution<double> distX(0.0, 1.0);  // Distribución uniforme para X
-    std::uniform_real_distribution<double> distY(0.0, 1.0); // Distribución uniforme para Y
+    std::uniform_real_distribution<uint64_t> distX(0.0, 1.0);  // Distribución uniforme para X
+    std::uniform_real_distribution<uint64_t> distY(0.0, 1.0); // Distribución uniforme para Y
     // Generar N puntos aleatorios usando las distribuciones de arriba
     for (auto& p : puntos) {
         p = { distX(rng), distY(rng) };
@@ -102,7 +102,7 @@ int CrearPuntos::CrearPuntosNArreglo() const
     distancias.reserve((N * (N - 1)) / 2);  // espacio exacto para la mitad de la matriz
     for (uint64_t i = 0; i < N; ++i) {
         for (uint64_t j = i + 1; j < N; ++j) {
-            double d = puntos[i].distancia(puntos[j]);
+            uint64_t d = puntos[i].distancia(puntos[j]);
             InfoEntrePuntos info = { puntos[i], puntos[j], d };
             distancias.push_back(info);
         }
@@ -139,8 +139,8 @@ int CrearPuntos::CrearPuntosNHeap() const {
     }
     std::vector<Punto> puntos(N);
     std::mt19937_64 rng{ std::random_device{}() };
-    std::uniform_real_distribution<double> distX(0.0, 1.0);  // Distribución uniforme para X
-    std::uniform_real_distribution<double> distY(0.0, 1.0); // Distribución uniforme para Y
+    std::uniform_real_distribution<uint64_t> distX(0.0, 1.0);  // Distribución uniforme para X
+    std::uniform_real_distribution<uint64_t> distY(0.0, 1.0); // Distribución uniforme para Y
     // Generar N puntos aleatorios usando las distribuciones de arriba
     for (auto& p : puntos) {
         p = { distX(rng), distY(rng) };
@@ -149,7 +149,7 @@ int CrearPuntos::CrearPuntosNHeap() const {
     std::priority_queue<InfoEntrePuntos, std::vector<InfoEntrePuntos>, Comparador> heap;
     for (uint64_t i = 0; i < N; ++i) {
         for (uint64_t j = i + 1; j < N; ++j) {
-            double d = puntos[i].distancia(puntos[j]);
+            uint64_t d = puntos[i].distancia(puntos[j]);
             InfoEntrePuntos info = { puntos[i], puntos[j], d };
             heap.push(info);
         }

@@ -1,0 +1,4 @@
+# Ignore venv directory
+/t2Logs
+
+.vscode/

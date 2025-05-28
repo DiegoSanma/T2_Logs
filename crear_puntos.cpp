@@ -117,6 +117,11 @@ int CrearPuntos::CrearPuntosNArreglo() const
     uint64_t total_pares = distancias.size();
     outDistancias.write(reinterpret_cast<const char*>(&total_pares), sizeof(uint64_t));
 
+    for(auto& p : puntos) {
+        outPuntos.write(reinterpret_cast<const char*>(&p.x), sizeof(uint64_t));
+        outPuntos.write(reinterpret_cast<const char*>(&p.y), sizeof(uint64_t));
+    }
+
     outPuntos.close();
     outDistancias.close();
     return 0;
@@ -128,8 +133,18 @@ int CrearPuntos::CrearPuntosNHeap() const {
     } else {
         std::cerr << "No se pudo eliminar el archivo (puede que no exista): " << fileDistancias << std::endl;
     }
+    if (std::remove(filePuntos) == 0) {
+        std::cout << "Archivo existente eliminado: " << filePuntos << std::endl;
+    } else {
+        std::cerr << "No se pudo eliminar el archivo (puede que no exista): " << filePuntos << std::endl;
+    }
     if (N == 0) {
         std::cerr << "Intestaste de crear 0 puntos\n";
+        return 1;
+    }
+    std::ofstream outPuntos(filePuntos, std::ios::binary | std::ios::trunc);
+    if (!outPuntos) {
+        std::cerr << "No se pudo abrir " << filePuntos << '\n';
         return 1;
     }
     std::ofstream outDistancias(fileDistancias, std::ios::binary | std::ios::trunc);
@@ -156,8 +171,15 @@ int CrearPuntos::CrearPuntosNHeap() const {
     }
 
     uint64_t total_pares = heap.size();
+
     outDistancias.write(reinterpret_cast<const char*>(&total_pares), sizeof(uint64_t));
 
+    for(auto& p : puntos) {
+        outPuntos.write(reinterpret_cast<const char*>(&p.x), sizeof(uint64_t));
+        outPuntos.write(reinterpret_cast<const char*>(&p.y), sizeof(uint64_t));
+    }
+
+    outPuntos.close();
     outDistancias.close();
     return 0;
 }

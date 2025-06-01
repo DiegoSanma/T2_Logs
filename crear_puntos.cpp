@@ -25,13 +25,32 @@
 
  
 /*────────  constructor & simple accessors (unchanged)  ───────*/
-CrearPuntos::CrearPuntos(const char* fnamePuntos, const char* fnameDistancias, int N, int X)
-    : filePuntos(fnamePuntos), fileDistancias(fnameDistancias), N(N), X(X) {}
+CrearPuntos::CrearPuntos(const char* fnamePuntos, const char* fnameDistancias, int N)
+    : filePuntos(fnamePuntos), fileDistancias(fnameDistancias), N(N) {}
 const char* CrearPuntos::getFilePuntos() const { return filePuntos; }
 const char* CrearPuntos::getFileDistancias() const { return fileDistancias; }
 int  CrearPuntos::getN()  const { return N; }
-int  CrearPuntos::getX()  const { return X; }
-void CrearPuntos::setX(int x)   { X = x;   }
+std::vector<Punto> CrearPuntos::getPuntos() {
+    if (puntos.empty()) {
+        std::cerr << "Error: No se han creado puntos." << std::endl;
+    }
+    return puntos; // Retorna los puntos generados
+}
+
+std::vector<InfoEntrePuntos> CrearPuntos::getArregloDistancias() {
+    if (arreglo_distancias.empty()) {
+        std::cerr << "Error: No se han calculado distancias." << std::endl;
+    }
+    return arreglo_distancias; // Retorna el arreglo de distancias
+}
+
+std::priority_queue<InfoEntrePuntos, std::vector<InfoEntrePuntos>, Comparador> CrearPuntos::getHeapDistancias() {
+    if (heap_distancias.empty()) {
+        std::cerr << "Error: No se han calculado distancias." << std::endl;
+    }
+    return heap_distancias; // Retorna el heap de distancias
+}
+
 
 
 int CrearPuntos::CrearPuntosNArreglo()

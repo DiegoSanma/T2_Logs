@@ -14,7 +14,7 @@ private:
     int X;
 
 public:
-    CrearPuntos(const char* filePuntos, const char* fileDistancias, int N,int X);
+    CrearPuntos(const char* filePuntos, const char* fileDistancias, int N);
 
     const char* getFilePuntos() const;
 
@@ -22,9 +22,11 @@ public:
 
     int getN() const;
 
-    int getX() const;
+    std::vector<Punto> getPuntos();
 
-    void setX(int x);
+    std::priority_queue<InfoEntrePuntos, std::vector<InfoEntrePuntos>, Comparador> getHeapDistancias();
+
+    std::vector<InfoEntrePuntos> getArregloDistancias();
 
     int CrearPuntosNArreglo();
 

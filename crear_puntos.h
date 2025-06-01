@@ -1,6 +1,8 @@
 #ifndef CrearPuntos_H
 #define CrearPuntos_H
 
+#include "puntos.h"
+
 class CrearPuntos {
 private:
     const char* filePuntos;
@@ -28,13 +30,6 @@ public:
 
     int CrearPuntosNHeap();
 };
-struct Punto {
-    double x;
-    double y;
-    Punto(double x_, double y_) : x(x_), y(y_) {}
-    double distancia(const Punto& otro) const {
-        return std::sqrt((x - otro.x) * (x - otro.x) + (y - otro.y) * (y - otro.y));
-    }
-};
+
 
 #endif

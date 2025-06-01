@@ -23,17 +23,6 @@
  #  include <thread>
  #endif
 
-struct InfoEntrePuntos {
-    Punto p1;
-    Punto p2;
-    double distancia;
-};
-
-struct Comparador {
-    bool operator()(const InfoEntrePuntos& a, const InfoEntrePuntos& b) const {
-        return a.distancia > b.distancia; // menor distancia → más prioritario
-    }
-};
  
 /*────────  constructor & simple accessors (unchanged)  ───────*/
 CrearPuntos::CrearPuntos(const char* fnamePuntos, const char* fnameDistancias, int N, int X)
@@ -52,8 +41,9 @@ int CrearPuntos::CrearPuntosNArreglo()
     std::uniform_real_distribution<double> distX(0.0, 1.0);  // Distribución uniforme para X
     std::uniform_real_distribution<double> distY(0.0, 1.0); // Distribución uniforme para Y
     // Generar N puntos aleatorios usando las distribuciones de arriba
+    int ids = 0; // Contador para asignar IDs únicos a los puntos
     for (auto& p : puntos_nuevos) {
-        p = Punto(distX(rng), distY(rng));
+        p = Punto(distX(rng), distY(rng),&p,ids++); // Crea cada punto único
     }
     this->puntos = puntos_nuevos; // Guardar los puntos generados en el objeto
     //Ahora, calculo la matriz de distancias entre todos mis puntos
@@ -62,7 +52,7 @@ int CrearPuntos::CrearPuntosNArreglo()
     for (double i = 0; i < N; ++i) {
         for (double j = i + 1; j < N; ++j) {
             double d = puntos[i].distancia(puntos[j]);
-            InfoEntrePuntos info = { puntos[i], puntos[j], d };
+            InfoEntrePuntos info = { &puntos[i], &puntos[j], d };
             distancias.push_back(info);
         }
     }
@@ -106,15 +96,16 @@ int CrearPuntos::CrearPuntosNHeap(){
     std::uniform_real_distribution<double> distX(0.0, 1.0);  // Distribución uniforme para X
     std::uniform_real_distribution<double> distY(0.0, 1.0); // Distribución uniforme para Y
     // Generar N puntos aleatorios usando las distribuciones de arriba
+    int ids = 0; // Contador para asignar IDs únicos a los puntos
     for (auto& p : puntos) {
-        p = { distX(rng), distY(rng) };
+        p = Punto(distX(rng), distY(rng),&p,ids++); // Crea cada punto único
     }
     //Ahora, calculo la matriz de distancias entre todos mis puntos
     std::priority_queue<InfoEntrePuntos, std::vector<InfoEntrePuntos>, Comparador> heap;
     for (double i = 0; i < N; ++i) {
         for (double j = i + 1; j < N; ++j) {
             double d = puntos[i].distancia(puntos[j]);
-            InfoEntrePuntos info = { puntos[i], puntos[j], d };
+            InfoEntrePuntos info = {&puntos[i],&puntos[j], d };
             heap.push(info);
         }
     }

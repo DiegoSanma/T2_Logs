@@ -14,6 +14,7 @@
  #include <random>
  #include <vector>
  #include <queue>
+ #include <algorithm>
  
  #ifndef _WIN32
  #  include <sys/mman.h>

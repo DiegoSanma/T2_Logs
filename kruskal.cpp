@@ -1,0 +1,69 @@
+// kruskal.cpp
+#include "kruskal.h"
+#include "union_find.h"
+
+#include <algorithm>
+#include <queue>
+
+/** Comparador para priorizar aristas de menor peso */
+struct EdgeCmp {
+    bool operator()(InfoEntrePuntos const& a,
+                    InfoEntrePuntos const& b) const {
+        return a.distancia2 > b.distancia2;
+    }
+};
+
+double run_kruskal_array(int N,
+                         const std::vector<InfoEntrePuntos>& edges,
+                         bool use_pc) {
+    UnionFind uf(N, use_pc);
+
+    // 1) Copia y ordena la lista de aristas
+    auto sorted = edges;
+    std::sort(sorted.begin(), sorted.end(),
+              [](auto const& a, auto const& b){
+                  return a.distancia2 < b.distancia2;
+              });
+
+    // 2) Toma aristas hasta armar un spanning tree de N-1 aristas
+    int taken = 0;
+    double total_weight = 0.0;
+    for (auto const& e : sorted) {
+        if (uf.find(e.u) != uf.find(e.v)) {
+            uf.unite(e.u, e.v);
+            total_weight += e.distancia2;
+            if (++taken == N - 1) break;
+        }
+    }
+    return total_weight;
+}
+
+double run_kruskal_heap(int N,
+                        const std::vector<InfoEntrePuntos>& edges,
+                        bool use_pc) {
+    UnionFind uf(N, use_pc);
+
+    // 1) Construye un min-heap copiando el vector de aristas
+    std::priority_queue<
+        InfoEntrePuntos,
+        std::vector<InfoEntrePuntos>,
+        EdgeCmp
+    > pq(
+        EdgeCmp{}, 
+        std::vector<InfoEntrePuntos>(edges.begin(), edges.end())
+    );
+
+    // 2) Extrae la arista mínima y la une si no cierra ciclo
+    int taken = 0;
+    double total_weight = 0.0;
+    while (taken < N - 1 && !pq.empty()) {
+        auto e = pq.top(); 
+        pq.pop();
+        if (uf.find(e.u) != uf.find(e.v)) {
+            uf.unite(e.u, e.v);
+            total_weight += e.distancia2;
+            ++taken;
+        }
+    }
+    return total_weight;
+}

@@ -1,66 +1,82 @@
-#include "crear_puntos.h"
 #include <iostream>
-#include <csignal>
-#include <cstdio>
+#include <vector>
+#include <map>
+#include <string>
 #include <chrono>
 
-#include <chrono>
-#include <ctime>
-#include <iomanip>
+#include "utils.h"     // generate_points, build_edge_list
+#include "kruskal.h"   // run_kruskal_array, run_kruskal_heap
 
-#define M       50  //50mb
-#define B       4096 //4096kb
-#define Xtest   60 //Tamaño de arreglo para cálculo de aridad
-#define Default 50 //Aridad óptima en caso de no correr código con find alpha
+// ─────── Global switches ───────
+constexpr bool RUN_OPT_ARR  = true;   // array + path-compression
+constexpr bool RUN_ARR      = true;   // array only
+constexpr bool RUN_OPT_HEAP = true;   // heap + path-compression
+constexpr bool RUN_HEAP     = true;   // heap only
 
-// 0: no corre esa prueba, 1: sí la corre
-#define RunAll 1 //Corre todas las pruebas
-#define RunOptiHeap 1 //Corre la prueba de optimización de find con un heap
-#define RunOptiArreglo 1 //Corre la prueba de optimización de find con un arreglo
-#define RunHeap 0 //Corre la prueba sin la optimización con un heap
-#define RunArreglo 1 //Corre la prueba sin la optimización con un arreglo
-
-int nlogs = 0; // número de logs generados
-
-static const char* FILE_ALPHA   = "arreglos_aridad.bin";
-
-static void delete_temp_files()
-{
-    std::remove(FILE_ALPHA);
-}
+// Experiment parameters:
+constexpr int REPS = 5;
+const std::vector<int> NS = {
+    // 1<<5,  1<<6,  1<<7,  1<<8,
+    // 1<<9, 1<<10, 1<<11, 1<<12
+    1<<13
+};
 
 int main() {
-    
-    std::cout << "Hola desde Docker!" << std::endl;
-    std::signal(SIGINT,  [](int){ delete_temp_files(); std::exit(130); });
-    std::signal(SIGTERM, [](int){ delete_temp_files(); std::exit(143); });
-    
-    // Primero, inicializo la clase que crea el arreglo
-    const char * filePuntos = "puntos.bin";
-    const char * fileDistancias = "distancias.bin";
-    CrearPuntos creador(filePuntos, fileDistancias, 32, Xtest);
+    using Clock = std::chrono::high_resolution_clock;
+    using ms    = std::chrono::milliseconds;
 
-    // bool findAplpha;
-    // std::cout << "¿Quieres encontrar la aridad? (X=" << Xtest << ") [1: sí, 0: no]: ";
-    // std::cin >> findAplpha;
-    int alfa;
-    if (RunOptiArreglo||RunAll) {
-        std::cout << "Parto creando los puntos" << std::endl;
-        int result = creador.CrearPuntosNArreglo();
-        if (result != 0) {
-            std::cerr << "Error al crear puntos: " << result << std::endl;
-            return result;
+    // Prepare experiments:
+    struct Experiment {
+        std::string name;
+        double (*fn)(int,
+                     const std::vector<InfoEntrePuntos>&,
+                     bool);
+        bool use_path;
+    };
+    std::vector<Experiment> experiments;
+    if (RUN_OPT_ARR)  experiments.push_back({ "ARR_OPT",  run_kruskal_array, true  });
+    if (RUN_ARR)      experiments.push_back({ "ARR",      run_kruskal_array, false });
+    if (RUN_OPT_HEAP) experiments.push_back({ "HEAP_OPT", run_kruskal_heap,  true  });
+    if (RUN_HEAP)     experiments.push_back({ "HEAP",     run_kruskal_heap,  false });
+
+    // Storage for timings:
+    std::map<std::string, std::vector<long long>> variant_times;
+
+    auto t_start = Clock::now();
+
+    for (int N : NS) {
+        for (int rep = 0; rep < REPS; ++rep) {
+            auto points = generate_points(N);
+            auto edges  = build_edge_list(points);
+
+            for (auto& exp : experiments) {
+                auto v0 = Clock::now();
+                double weight = exp.fn(N, edges, exp.use_path);
+                (void)weight; // Suppress unused variable warning
+                // std::cout << "Experiment: " << exp.name 
+                //           << ", N = " << N 
+                //           << ", rep = " << rep 
+                //           << ", weight = " << weight 
+                //           << "\n";
+                auto v1 = Clock::now();
+                variant_times[exp.name].push_back(
+                    std::chrono::duration_cast<ms>(v1 - v0).count()
+                );
+            }
         }
-
     }
 
-    if (RunOptiHeap||RunAll) {
-        std::cout << "Parto creando los puntos en un heap" << std::endl;
-        int result = creador.CrearPuntosNHeap();
-        if (result != 0) {
-            std::cerr << "Error al crear puntos en un heap: " << result << std::endl;
-            return result;
-        }
+    auto t_end = Clock::now();
+    auto total_elapsed = std::chrono::duration_cast<ms>(t_end - t_start).count();
+
+    std::cout << "Total elapsed time: " << total_elapsed << " ms\n";
+    for (auto& [label, times] : variant_times) {
+        long long sum = 0;
+        for (auto d : times) sum += d;
+        double avg = double(sum) / times.size();
+        std::cout << label 
+                  << ": ran " << times.size() 
+                  << " times, avg = " << avg << " ms\n";
     }
 
     return 0;

@@ -17,7 +17,7 @@
 #define RunAll 1 //Corre todas las pruebas
 #define RunOptiHeap 1 //Corre la prueba de optimización de find con un heap
 #define RunOptiArreglo 1 //Corre la prueba de optimización de find con un arreglo
-#define RunHeap o //Corre la prueba sin la optimización con un heap
+#define RunHeap 0 //Corre la prueba sin la optimización con un heap
 #define RunArreglo 1 //Corre la prueba sin la optimización con un arreglo
 
 int nlogs = 0; // número de logs generados

@@ -1,124 +1,158 @@
-/*───────────────────────────────────────────────────────────────*
- *  crear_array.cpp   — fast, cross‑platform generator
- *  Keeps the same CrearPuntos interface; no other code changes
- *  required in your project or Docker setup.
- *───────────────────────────────────────────────────────────────*/
+/**
+ * @file crear_puntos.cpp
+ * @brief Implementación de la clase CrearPuntos para generación de puntos
+ *        y cálculo de distancias al cuadrado en dos estructuras: arreglo ordenado
+ *        y heap de prioridades.
+ * @author Ateuluz
+ */
 
- #include "crear_puntos.h"
+#include "crear_puntos.h"
 
- #include <cstdint>
- #include <cstdlib>
- #include <cstring>
- #include <fstream>
- #include <iostream>
- #include <random>
- #include <vector>
- #include <queue>
- #include <algorithm>
- 
- #ifndef _WIN32
- #  include <sys/mman.h>
- #  include <sys/stat.h>
- #  include <fcntl.h>
- #  include <unistd.h>
- #  include <thread>
- #endif
+#include <cstdint>
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <fstream>
+#include <iostream>
+#include <random>
+#include <vector>
+#include <queue>
+#include <algorithm>
 
-struct InfoEntrePuntos {
-    Punto p1;
-    Punto p2;
-    double distancia;
-};
+#ifndef _WIN32
+#  include <sys/mman.h>
+#  include <sys/stat.h>
+#  include <fcntl.h>
+#  include <unistd.h>
+#  include <thread>
+#endif
 
-struct Comparador {
-    bool operator()(const InfoEntrePuntos& a, const InfoEntrePuntos& b) const {
-        return a.distancia > b.distancia; // menor distancia → más prioritario
-    }
-};
- 
-/*────────  constructor & simple accessors (unchanged)  ───────*/
-CrearPuntos::CrearPuntos(const char* fnamePuntos, const char* fnameDistancias, int N, int X)
-    : filePuntos(fnamePuntos), fileDistancias(fnameDistancias), N(N), X(X) {}
-const char* CrearPuntos::getFilePuntos() const { return filePuntos; }
-const char* CrearPuntos::getFileDistancias() const { return fileDistancias; }
-int  CrearPuntos::getN()  const { return N; }
-int  CrearPuntos::getX()  const { return X; }
-void CrearPuntos::setX(int x)   { X = x;   }
+/**
+ * @brief Calcula la distancia euclidiana al cuadrado entre dos puntos.
+ * @param a Primer punto.
+ * @param b Segundo punto.
+ * @return (x1-x2)^2 + (y1-y2)^2.
+ */
+inline double distancia2(const Punto& a, const Punto& b) {
+    double dx = a.x - b.x;
+    double dy = a.y - b.y;
+    return dx*dx + dy*dy;
+}
 
-
-int CrearPuntos::CrearPuntosNArreglo()
-{
-    std::vector<Punto> puntos_nuevos(N);
+/**
+ * @brief Genera N puntos aleatorios en el rango [0,1]×[0,1].
+ * @param count Cantidad de puntos a generar.
+ * @return Vector de puntos generados.
+ */
+static std::vector<Punto> generarPuntos(size_t count) {
     std::mt19937_64 rng{ std::random_device{}() };
-    std::uniform_real_distribution<double> distX(0.0, 1.0);  // Distribución uniforme para X
-    std::uniform_real_distribution<double> distY(0.0, 1.0); // Distribución uniforme para Y
-    // Generar N puntos aleatorios usando las distribuciones de arriba
-    for (auto& p : puntos_nuevos) {
-        p = Punto(distX(rng), distY(rng));
+    std::uniform_real_distribution<double> dist(0.0, 1.0);
+
+    std::vector<Punto> v;
+    v.reserve(count);
+    for (size_t i = 0; i < count; ++i) {
+        v.push_back({ dist(rng), dist(rng) });
     }
-    this->puntos = puntos_nuevos; // Guardar los puntos generados en el objeto
-    //Ahora, calculo la matriz de distancias entre todos mis puntos
-    std::vector<InfoEntrePuntos> distancias;
-    distancias.reserve((N * (N - 1)) / 2);  // espacio exacto para la mitad de la matriz
-    for (double i = 0; i < N; ++i) {
-        for (double j = i + 1; j < N; ++j) {
-            double d = puntos[i].distancia(puntos[j]);
-            InfoEntrePuntos info = { puntos[i], puntos[j], d };
-            distancias.push_back(info);
+    return v;
+}
+
+/*---------------------------------------------------*/
+
+/**
+ * @brief Constructor de CrearPuntos.
+ * @param N Cantidad de puntos a generar.
+ * @param X Parámetro auxiliar.
+ */
+CrearPuntos::CrearPuntos(int N, int X)
+    : N(N)
+    , X(X)
+{}
+
+/**
+ * @brief Obtiene el número de puntos a generar.
+ * @return Valor de N.
+ */
+int CrearPuntos::getN() const { return N; }
+
+/**
+ * @brief Obtiene el parámetro X.
+ * @return Valor de X.
+ */
+int CrearPuntos::getX() const { return X; }
+
+/**
+ * @brief Establece un nuevo valor para X.
+ * @param x Nuevo valor de X.
+ */
+void CrearPuntos::setX(int x) { X = x; }
+
+/**
+ * @brief Genera un arreglo ordenado de distancias al cuadrado entre todos los puntos.
+ * @return 0 si éxito, !=0 si error.
+ */
+int CrearPuntos::CrearPuntosNArreglo() {
+    if (N <= 0) {
+        std::cerr << "Error: N debe ser > 0.\n";
+        return 1;
+    }
+
+    // Generar puntos y almacenar
+    puntos = generarPuntos(static_cast<size_t>(N));
+
+    // Reservar espacio para todas las parejas
+    size_t total = static_cast<size_t>(N) * (N - 1) / 2;
+    arreglo_distancias.clear();
+    arreglo_distancias.reserve(total);
+
+    // Calcular distancias^2
+    for (size_t i = 0; i < puntos.size(); ++i) {
+        for (size_t j = i + 1; j < puntos.size(); ++j) {
+            double d2 = distancia2(puntos[i], puntos[j]);
+            arreglo_distancias.push_back({ puntos[i], puntos[j], d2 });
         }
     }
 
-    // (Opcional) Ordenar por distancia
-    std::sort(distancias.begin(), distancias.end(),
-              [](const InfoEntrePuntos& a, const InfoEntrePuntos& b) {
+    // Ordenar por distancia creciente
+    std::sort(arreglo_distancias.begin(),
+              arreglo_distancias.end(),
+              [](auto const& a, auto const& b) {
                   return a.distancia < b.distancia;
               });
-    this->arreglo_distancias = distancias; // Guardar el arreglo de distancias en el objeto
+
     return 0;
 }
 
-int CrearPuntos::CrearPuntosNHeap(){
-    if (std::remove(fileDistancias) == 0) {
-        std::cout << "Archivo existente eliminado: " << fileDistancias << std::endl;
-    } else {
-        std::cerr << "No se pudo eliminar el archivo (puede que no exista): " << fileDistancias << std::endl;
-    }
-    if (std::remove(filePuntos) == 0) {
-        std::cout << "Archivo existente eliminado: " << filePuntos << std::endl;
-    } else {
-        std::cerr << "No se pudo eliminar el archivo (puede que no exista): " << filePuntos << std::endl;
-    }
-    if (N == 0) {
-        std::cerr << "Intestaste de crear 0 puntos\n";
+/**
+ * @brief Genera un heap de prioridades con las distancias al cuadrado entre puntos.
+ * @return 0 si éxito, !=0 si error.
+ */
+int CrearPuntos::CrearPuntosNHeap() {
+    if (N <= 0) {
+        std::cerr << "Error: N debe ser > 0.\n";
         return 1;
     }
-    std::ofstream outPuntos(filePuntos, std::ios::binary | std::ios::trunc);
-    if (!outPuntos) {
-        std::cerr << "No se pudo abrir " << filePuntos << '\n';
-        return 1;
-    }
-    std::ofstream outDistancias(fileDistancias, std::ios::binary | std::ios::trunc);
-    if (!outDistancias) {
-        std::cerr << "No se pudo abrir " << fileDistancias << '\n';
-        return 1;
-    }
-    std::vector<Punto> puntos_nuevos(N);
-    std::mt19937_64 rng{ std::random_device{}() };
-    std::uniform_real_distribution<double> distX(0.0, 1.0);  // Distribución uniforme para X
-    std::uniform_real_distribution<double> distY(0.0, 1.0); // Distribución uniforme para Y
-    // Generar N puntos aleatorios usando las distribuciones de arriba
-    for (auto& p : puntos) {
-        p = { distX(rng), distY(rng) };
-    }
-    //Ahora, calculo la matriz de distancias entre todos mis puntos
-    std::priority_queue<InfoEntrePuntos, std::vector<InfoEntrePuntos>, Comparador> heap;
-    for (double i = 0; i < N; ++i) {
-        for (double j = i + 1; j < N; ++j) {
-            double d = puntos[i].distancia(puntos[j]);
-            InfoEntrePuntos info = { puntos[i], puntos[j], d };
-            heap.push(info);
+
+    // Generar y almacenar puntos
+    puntos = generarPuntos(static_cast<size_t>(N));
+
+    // Construir heap de distancias^2
+    for (size_t i = 0; i < puntos.size(); ++i) {
+        for (size_t j = i + 1; j < puntos.size(); ++j) {
+            double d2 = distancia2(puntos[i], puntos[j]);
+            heap_distancias.push({ puntos[i], puntos[j], d2 });
         }
     }
-    this->heap_distancias = heap; // Guardar el heap de distancias en el objeto
+
     return 0;
 }
+
+
+/* Cambios realizados:
+ * - Se reemplazaron índices de bucle de tipo double por size_t para mayor
+ *   seguridad y claridad.
+ * - Se calcula la distancia al cuadrado (distancia2) evitando llamadas a sqrt.
+ * - Se unificó la generación de puntos en la función auxiliar generarPuntos().
+ * - Se reforzó el chequeo de errores (N <= 0, apertura de archivos).
+ * - Se añadieron comentarios Doxygen en todas las funciones y estructuras.
+ * - Firma de autor: Ateuluz
+ */

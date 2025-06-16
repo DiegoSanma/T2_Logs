@@ -20,9 +20,9 @@ void UnionFind::unite(int rx, int ry) {
     if (rx == ry) return;
     if (rank_[rx] < rank_[ry]) {
         parent[rx] = ry;
-        rank_[ry]++;
+        rank_[ry] = std::max(rank_[ry], rank_[rx] + 1);
     } else {
         parent[ry] = rx;
-        rank_[rx]++;
+        rank_[rx] = std::max(rank_[rx], rank_[ry] + 1);
     }
 }

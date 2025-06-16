@@ -1,0 +1,55 @@
+Total elapsed time: 21480 ms
+
+=== Results for N = 32 ===
+ARR_OPT: ran 5 times, avg = 0 ms
+ARR: ran 5 times, avg = 0 ms
+HEAP_OPT: ran 5 times, avg = 0 ms
+HEAP: ran 5 times, avg = 0 ms
+
+=== Results for N = 64 ===
+ARR_OPT: ran 5 times, avg = 0 ms
+ARR: ran 5 times, avg = 0 ms
+HEAP_OPT: ran 5 times, avg = 0 ms
+HEAP: ran 5 times, avg = 0 ms
+
+=== Results for N = 128 ===
+ARR_OPT: ran 5 times, avg = 1 ms
+ARR: ran 5 times, avg = 1 ms
+HEAP_OPT: ran 5 times, avg = 0 ms
+HEAP: ran 5 times, avg = 0 ms
+
+=== Results for N = 256 ===
+ARR_OPT: ran 5 times, avg = 5.6 ms
+ARR: ran 5 times, avg = 4.6 ms
+HEAP_OPT: ran 5 times, avg = 0.4 ms
+HEAP: ran 5 times, avg = 0.4 ms
+
+=== Results for N = 512 ===
+ARR_OPT: ran 5 times, avg = 14.4 ms
+ARR: ran 5 times, avg = 13.4 ms
+HEAP_OPT: ran 5 times, avg = 2.4 ms
+HEAP: ran 5 times, avg = 2.2 ms
+
+=== Results for N = 1024 ===
+ARR_OPT: ran 5 times, avg = 67.8 ms
+ARR: ran 5 times, avg = 63.6 ms
+HEAP_OPT: ran 5 times, avg = 14.6 ms
+HEAP: ran 5 times, avg = 14.8 ms
+
+=== Results for N = 2048 ===
+ARR_OPT: ran 5 times, avg = 300.8 ms
+ARR: ran 5 times, avg = 299.6 ms
+HEAP_OPT: ran 5 times, avg = 86.8 ms
+HEAP: ran 5 times, avg = 86 ms
+
+=== Results for N = 4096 ===
+ARR_OPT: ran 5 times, avg = 1267.8 ms
+ARR: ran 5 times, avg = 1266.8 ms
+HEAP_OPT: ran 5 times, avg = 307.8 ms
+HEAP: ran 5 times, avg = 310.4 ms
+
+=== Overall Averages ===
+ARR: ran 40 times, avg = 206.125 ms
+ARR_OPT: ran 40 times, avg = 207.175 ms
+HEAP: ran 40 times, avg = 51.725 ms
+HEAP_OPT: ran 40 times, avg = 51.5 ms

@@ -9,9 +9,9 @@
  * @param use_path_compression
  *                       True para path-compression + union-by-rank.
  */
-double run_kruskal_array(int N,
-                       const std::vector<InfoEntrePuntos>& edges,
-                       bool use_path_compression);
+ArbolCoberturaMinimo run_kruskal_array(int N,
+                                       const std::vector<InfoEntrePuntos>& edges,
+                                       bool use_path_compression);
 
 /**
  * @brief Kruskal usando un min-heap de aristas.
@@ -20,6 +20,6 @@ double run_kruskal_array(int N,
  * @param use_path_compression
  *                       True para path-compression + union-by-rank.
  */
-double run_kruskal_heap(int N,
-                      const std::vector<InfoEntrePuntos>& edges,
-                      bool use_path_compression);
+ArbolCoberturaMinimo run_kruskal_heap(int N,
+                                      const std::vector<InfoEntrePuntos>& edges,
+                                      bool use_path_compression);

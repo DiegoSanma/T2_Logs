@@ -1,5 +1,6 @@
 #pragma once
 #include <cstddef>
+#include <vector>
 
 /** @brief Punto en el plano 2D. */
 struct Punto {
@@ -14,4 +15,12 @@ struct InfoEntrePuntos {
     
     InfoEntrePuntos(std::size_t u_, std::size_t v_, double d2_)
       : u(u_), v(v_), distancia2(d2_) {}
+};
+
+/** @brief Arbol covertor minimo y su peso. */
+struct ArbolCoberturaMinimo {
+    std::vector<std::size_t> aristas; /**< Aristas del árbol (índices de InfoEntrePuntos) */
+    double peso;                     /**< Peso total del árbol (suma de distancias²) */
+    ArbolCoberturaMinimo(std::vector<std::size_t> aristas_, double peso_)
+      : aristas(std::move(aristas_)), peso(peso_) {}
 };

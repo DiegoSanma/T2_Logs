@@ -29,9 +29,9 @@ int main() {
 
     struct Experiment {
         std::string name;
-        double (*fn)(int,
-                     const std::vector<InfoEntrePuntos>&,
-                     bool);
+        ArbolCoberturaMinimo (*fn)(int,
+                                   const std::vector<InfoEntrePuntos>&,
+                                   bool);
         bool use_path;
     };
 
@@ -55,13 +55,13 @@ int main() {
 
             for (auto& exp : experiments) {
                 auto v0 = Clock::now();
-                double weight = exp.fn(N, edges, exp.use_path);
-                (void)weight; // Suppress unused variable warning
+                ArbolCoberturaMinimo acm = exp.fn(N, edges, exp.use_path);
                 if (LOGS) {
                     std::cout << "Experiment: " << exp.name 
                               << ", N = " << N 
                               << ", rep = " << rep 
-                              << ", weight = " << weight 
+                              << ", weight = " << acm.peso
+                              << ", edges = " << acm.aristas.size() 
                               << "\n";
                 }
                 auto v1 = Clock::now();

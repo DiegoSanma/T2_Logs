@@ -1,6 +1,8 @@
 // kruskal.cpp
 #include "kruskal.h"
 #include "union_find.h"
+#include "geometry.h"
+#include <vector>
 
 #include <algorithm>
 #include <queue>
@@ -13,10 +15,11 @@ struct EdgeCmp {
     }
 };
 
-double run_kruskal_array(int N,
+ArbolCoberturaMinimo run_kruskal_array(int N,
                          const std::vector<InfoEntrePuntos>& edges,
                          bool use_pc) {
     UnionFind uf(N, use_pc);
+    std::vector<std::size_t> aristas(N - 1); // Reservar espacio para N-1 aristas
 
     // 1) Copia y ordena la lista de aristas
     auto sorted = edges;
@@ -31,17 +34,23 @@ double run_kruskal_array(int N,
     for (auto const& e : sorted) {
         if (uf.find(e.u) != uf.find(e.v)) {
             uf.unite(e.u, e.v);
+            // Guarda la arista en el árbol de cobertura mínimo
+            aristas[taken] = &e - &edges[0]; // índice de la arista
             total_weight += e.distancia2;
             if (++taken == N - 1) break;
         }
     }
-    return total_weight;
+    // 3) Devuelve el árbol de cobertura mínimo
+    //    y su peso total
+    ArbolCoberturaMinimo acm(std::move(aristas), total_weight);
+    return acm;
 }
 
-double run_kruskal_heap(int N,
+ArbolCoberturaMinimo run_kruskal_heap(int N,
                         const std::vector<InfoEntrePuntos>& edges,
                         bool use_pc) {
     UnionFind uf(N, use_pc);
+    std::vector<std::size_t> aristas(N - 1); // Reservar espacio para N-1 aristas
 
     // 1) Construye un min-heap copiando el vector de aristas
     std::priority_queue<
@@ -61,9 +70,14 @@ double run_kruskal_heap(int N,
         pq.pop();
         if (uf.find(e.u) != uf.find(e.v)) {
             uf.unite(e.u, e.v);
+            // Guarda la arista en el árbol de cobertura mínimo
+            aristas[taken] = &e - &edges[0]; // índice de la arista
             total_weight += e.distancia2;
             ++taken;
         }
     }
-    return total_weight;
+    // 3) Devuelve el árbol de cobertura mínimo
+    //    y su peso total
+    ArbolCoberturaMinimo acm(std::move(aristas), total_weight);
+    return acm;
 }

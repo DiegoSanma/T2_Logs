@@ -23,6 +23,18 @@ const std::vector<int> NS = {
     1<<9, 1<<10, 1<<11, 1<<12
 };
 
+/**
+ * @brief Punto de entrada: ejecuta los experimentos de Kruskal.
+ *
+ * Crea cuatro variantes del algoritmo (array/heap con/sin optimización),
+ * para distintos tamaños N y repeticiones REPS. Mide y
+ * reporta tiempos promedio por N y totales.
+ *
+ * Variables globales (flags RUN_* y LOGS) controlan
+ * qué variantes se ejecutan y si se imprimen logs intermedios.
+ *
+ * @return Código de salida (0 si todo OK).
+ */
 int main() {
     using Clock = std::chrono::high_resolution_clock;
     using ms    = std::chrono::milliseconds;

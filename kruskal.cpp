@@ -32,8 +32,10 @@ ArbolCoberturaMinimo run_kruskal_array(int N,
     int taken = 0;
     double total_weight = 0.0;
     for (auto const& e : sorted) {
-        if (uf.find(e.u) != uf.find(e.v)) {
-            uf.unite(e.u, e.v);
+        int runion_u = uf.find(e.u);
+        int runion_v = uf.find(e.v);
+        if (runion_u != runion_v) {
+            uf.unite(runion_u, runion_v);
             // Guarda la arista en el árbol de cobertura mínimo
             aristas[taken] = &e - &edges[0]; // índice de la arista
             total_weight += e.distancia2;
@@ -68,8 +70,11 @@ ArbolCoberturaMinimo run_kruskal_heap(int N,
     while (taken < N - 1 && !pq.empty()) {
         auto e = pq.top(); 
         pq.pop();
-        if (uf.find(e.u) != uf.find(e.v)) {
-            uf.unite(e.u, e.v);
+        int runion_u = uf.find(e.u);
+        int runion_v = uf.find(e.v);
+        if (runion_u != runion_v) {
+            // Une los conjuntos que contienen u y v
+            uf.unite(runion_u, runion_v);
             // Guarda la arista en el árbol de cobertura mínimo
             aristas[taken] = &e - &edges[0]; // índice de la arista
             total_weight += e.distancia2;

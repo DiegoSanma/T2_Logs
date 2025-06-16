@@ -17,7 +17,7 @@ constexpr bool LOGS         = false;  // print experiment logs
 // ────────────────────────────────
 
 // Experiment parameters:
-constexpr int REPS = 25;
+constexpr int REPS = 5;
 const std::vector<int> NS = {
     1<<5,  1<<6,  1<<7,  1<<8,
     1<<9, 1<<10, 1<<11, 1<<12

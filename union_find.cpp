@@ -16,19 +16,13 @@ int UnionFind::find(int x) {
     return root;
 }
 
-void UnionFind::unite(int x, int y) {
-    int rx = find(x), ry = find(y);
+void UnionFind::unite(int rx, int ry) {
     if (rx == ry) return;
-    if (path_compression) {
-        if (rank_[rx] < rank_[ry]) {
-            parent[rx] = ry;
-        } else if (rank_[ry] < rank_[rx]) {
-            parent[ry] = rx;
-        } else {
-            parent[ry] = rx;
-            rank_[rx]++;
-        }
+    if (rank_[rx] < rank_[ry]) {
+        parent[rx] = ry;
+        rank_[ry]++;
     } else {
         parent[ry] = rx;
+        rank_[rx]++;
     }
 }

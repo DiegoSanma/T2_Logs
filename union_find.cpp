@@ -2,7 +2,7 @@
 #include "union_find.h"
 
 UnionFind::UnionFind(int n, bool use_pc)
-    : parent(n), rank_(n, 0), path_compression(use_pc)
+    : parent(n), rank_(n, 1), path_compression(use_pc)
 {
     for (int i = 0; i < n; ++i)
         parent[i] = i;
@@ -20,9 +20,9 @@ void UnionFind::unite(int rx, int ry) {
     if (rx == ry) return;
     if (rank_[rx] < rank_[ry]) {
         parent[rx] = ry;
-        rank_[ry] = std::max(rank_[ry], rank_[rx] + 1);
+        rank_[ry] += rank_[rx];
     } else {
         parent[ry] = rx;
-        rank_[rx] = std::max(rank_[rx], rank_[ry] + 1);
+        rank_[rx] += rank_[ry];
     }
 }

@@ -45,6 +45,7 @@ ArbolCoberturaMinimo run_kruskal_array(int N,
     // 3) Devuelve el árbol de cobertura mínimo
     //    y su peso total
     ArbolCoberturaMinimo acm(std::move(aristas), total_weight);
+    acm.sumfind = uf.sumfind; // Suma de búsquedas realizadas
     return acm;
 }
 
@@ -84,5 +85,6 @@ ArbolCoberturaMinimo run_kruskal_heap(int N,
     // 3) Devuelve el árbol de cobertura mínimo
     //    y su peso total
     ArbolCoberturaMinimo acm(std::move(aristas), total_weight);
+    acm.sumfind = uf.sumfind; // Suma de búsquedas realizadas
     return acm;
 }

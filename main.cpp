@@ -13,7 +13,7 @@ constexpr bool RUN_OPT_ARR  = true;   // array + path-compression
 constexpr bool RUN_ARR      = true;   // array only
 constexpr bool RUN_OPT_HEAP = true;   // heap + path-compression
 constexpr bool RUN_HEAP     = true;   // heap only
-constexpr bool LOGS         = false;  // print experiment logs
+constexpr bool LOGS         = true;  // print experiment logs
 // ────────────────────────────────
 
 // Experiment parameters:
@@ -48,10 +48,10 @@ int main() {
     };
 
     std::vector<Experiment> experiments;
-    if (RUN_OPT_ARR)  experiments.push_back({ "ARR_OPT",  run_kruskal_array, true  });
     if (RUN_ARR)      experiments.push_back({ "ARR",      run_kruskal_array, false });
-    if (RUN_OPT_HEAP) experiments.push_back({ "HEAP_OPT", run_kruskal_heap,  true  });
     if (RUN_HEAP)     experiments.push_back({ "HEAP",     run_kruskal_heap,  false });
+    if (RUN_OPT_ARR)  experiments.push_back({ "ARR_OPT",  run_kruskal_array, true  });
+    if (RUN_OPT_HEAP) experiments.push_back({ "HEAP_OPT", run_kruskal_heap,  true  });
 
     // Storage for per-N and overall timings
     std::map<int, std::map<std::string, std::vector<long long>>> times_by_N;
@@ -64,16 +64,17 @@ int main() {
         for (int rep = 0; rep < REPS; ++rep) {
             auto points = generate_points(N);
             auto edges  = build_edge_list(points);
-
+            
             for (auto& exp : experiments) {
                 auto v0 = Clock::now();
                 ArbolCoberturaMinimo acm = exp.fn(N, edges, exp.use_path);
                 if (LOGS) {
                     std::cout << "Experiment: " << exp.name 
-                              << ", N = " << N 
-                              << ", rep = " << rep 
-                              << ", weight = " << acm.peso
-                              << ", edges = " << acm.aristas.size() 
+                            //   << ", N = " << N 
+                            //   << ", rep = " << rep 
+                            //   << ", weight = " << acm.peso
+                            //   << ", edges = " << acm.aristas.size() 
+                              << ", sumfind = " << acm.sumfind
                               << "\n";
                 }
                 auto v1 = Clock::now();

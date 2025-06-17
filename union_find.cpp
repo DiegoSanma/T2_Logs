@@ -9,6 +9,7 @@ UnionFind::UnionFind(int n, bool use_pc)
 }
 
 int UnionFind::find(int x) {
+    sumfind++;
     if (parent[x] == x) return x;
     int root = find(parent[x]);
     if (path_compression)

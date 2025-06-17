@@ -41,6 +41,7 @@ public:
      */
     void unite(int x, int y);
 
+    long long sumfind = 0; // Suma de las búsquedas realizadas
 private:
     std::vector<int> parent;
     std::vector<int> rank_;

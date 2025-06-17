@@ -19,6 +19,7 @@ struct InfoEntrePuntos {
 
 /** @brief Arbol covertor minimo y su peso. */
 struct ArbolCoberturaMinimo {
+    long long sumfind = 0; // Suma de las búsquedas realizadas
     std::vector<std::size_t> aristas; /**< Aristas del árbol (índices de InfoEntrePuntos) */
     double peso;                     /**< Peso total del árbol (suma de distancias²) */
     ArbolCoberturaMinimo(std::vector<std::size_t> aristas_, double peso_)

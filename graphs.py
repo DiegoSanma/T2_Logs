@@ -9,7 +9,8 @@ results = {
     "HEAP_OPT": [],
     "HEAP": []
 }
-
+diff_arr = []
+diff_heap = []
 # Leer el archivo
 with open("log.txt", "r") as file:
     lines = file.readlines()
@@ -42,6 +43,23 @@ for algo, times in results.items():
     if len(times) != len(n_values):
         print(f"Advertencia: {algo} tiene {len(times)} valores, pero hay {len(n_values)} tamaños N.")
 
+
+for i in range(len(results["ARR_OPT"])):
+    # print("----------------------------")
+    # if results["ARR"][i] - results["ARR_OPT"][i] < 0:
+        # print(f"Diferencia negativa encontrada en ARR:\n\tindice : {i}", f"no opt = {results["ARR"][i]}", "vs", f"opt = {results["ARR_OPT"][i]}")
+        diff_arr.append((results["ARR"][i] - results["ARR_OPT"][i], i))
+    # if results["HEAP"][i] - results["HEAP_OPT"][i] < 0:
+        # print(f"Diferencia negativa encontrada en HEAP:\n\tindice = {i}", f"no opt = {results["HEAP"][i]}", "vs", f"opt = {results["HEAP_OPT"][i]}")
+        diff_heap.append((results["HEAP"][i] - results["HEAP_OPT"][i], i))
+
+print("Diferencias entre ARR_OPT y ARR:")
+for i in range(len(diff_arr)):
+    print(f"\t{diff_arr[i]}")
+print("Diferencias entre HEAP_OPT y HEAP:")
+for i in range(len(diff_heap)):
+    print(f"\t{diff_heap[i]}")
+
 # Graficar resultados
 plt.figure(figsize=(10, 6))
 for algo, times in results.items():
@@ -50,7 +68,7 @@ for algo, times in results.items():
 
 plt.xlabel('Tamaño de entrada N')
 plt.ylabel('Tiempo promedio (ms)')
-plt.title('Comparación de algoritmos por tamaño de entrada')
+plt.title('Comparación de algoritmos con y sin optimización según tiempo por tamaño de entrada')
 plt.legend()
 plt.grid(True)
 plt.tight_layout()

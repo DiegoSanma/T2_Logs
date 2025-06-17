@@ -13,7 +13,7 @@ constexpr bool RUN_OPT_ARR  = true;   // array + path-compression
 constexpr bool RUN_ARR      = true;   // array only
 constexpr bool RUN_OPT_HEAP = true;   // heap + path-compression
 constexpr bool RUN_HEAP     = true;   // heap only
-constexpr bool LOGS         = true;  // print experiment logs
+constexpr bool LOGS         = false;  // print experiment logs
 // ────────────────────────────────
 
 // Experiment parameters:
@@ -55,6 +55,7 @@ int main() {
 
     // Storage for per-N and overall timings
     std::map<int, std::map<std::string, std::vector<long long>>> times_by_N;
+    std::map<int, std::map<std::string, std::vector<long long>>> finds_by_N;
     std::map<std::string, std::vector<long long>> overall_times;
 
     // Start total timer
@@ -70,10 +71,10 @@ int main() {
                 ArbolCoberturaMinimo acm = exp.fn(N, edges, exp.use_path);
                 if (LOGS) {
                     std::cout << "Experiment: " << exp.name 
-                            //   << ", N = " << N 
-                            //   << ", rep = " << rep 
-                            //   << ", weight = " << acm.peso
-                            //   << ", edges = " << acm.aristas.size() 
+                              << ", N = " << N 
+                              << ", rep = " << rep 
+                              << ", weight = " << acm.peso
+                              << ", edges = " << acm.aristas.size() 
                               << ", sumfind = " << acm.sumfind
                               << "\n";
                 }
@@ -81,6 +82,7 @@ int main() {
 
                 long long dur = std::chrono::duration_cast<ms>(v1 - v0).count();
                 times_by_N[N][exp.name].push_back(dur);
+                finds_by_N[N][exp.name].push_back(acm.sumfind);
                 overall_times[exp.name].push_back(dur);
             }
         }
@@ -116,6 +118,18 @@ int main() {
         std::cout << label
                   << ": ran " << times.size()
                   << " times, avg = " << avg << " ms\n";
+                }
+    std::cout << '\n';
+
+    // 4) Print per-N breakdown
+    for (int N : NS) {
+        std::cout << "=== Results for N = " << N << " ===\n";
+        for (auto& exp : experiments) {
+            auto& finds = finds_by_N[N][exp.name][0];
+            std::cout << exp.name
+                      << ": find calls: " << finds << " \n";
+        }
+        std::cout << '\n';
     }
 
     return 0;

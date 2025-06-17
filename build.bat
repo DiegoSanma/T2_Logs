@@ -10,6 +10,7 @@ set "CXXFLAGS=-std=c++17 -O2 -Wall -Wextra -I."
 REM —— Lista de fuentes y nombre del ejecutable ——
 set "SRCS=geometry.cpp union_find.cpp utils.cpp kruskal.cpp main.cpp"
 set "TARGET=experiments.exe"
+set "GRAPH=graphs.py"
 
 REM —— Limpieza ——
 echo Cleaning old artifacts...
@@ -25,6 +26,11 @@ for %%F in (%SRCS%) do (
 REM —— Enlazado ——
 echo Linking into %TARGET%...
 %CXX% %CXXFLAGS% *.o -o %TARGET%
+
+REM —— Ejecución y registro de salida ——
+echo Running %TARGET% and logging output to log.txt...
+%TARGET% > log.txt
+python %GRAPH%
 
 echo.
 echo Build complete. Run %TARGET% to execute your experiments.

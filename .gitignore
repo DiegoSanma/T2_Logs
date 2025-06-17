@@ -2,3 +2,6 @@
 /t2Logs
 
 .vscode/
+.python-version
+
+venv/

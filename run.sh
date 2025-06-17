@@ -10,7 +10,7 @@ CXXFLAGS="-std=c++17 -O2 -Wall -Wextra -I."
 
 # —— Fuentes & binario ——
 SRCS=(
-  crear_puntos.cpp
+  # crear_puntos.cpp
   geometry.cpp
   union_find.cpp
   utils.cpp

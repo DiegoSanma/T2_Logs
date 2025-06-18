@@ -18,7 +18,6 @@ int UnionFind::find(int x) {
 }
 
 void UnionFind::unite(int rx, int ry) {
-    if (rx == ry) return;
     if (rank_[rx] < rank_[ry]) {
         parent[rx] = ry;
         rank_[ry] += rank_[rx];

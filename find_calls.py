@@ -1,5 +1,6 @@
 import re
 import matplotlib.pyplot as plt
+import sys
 
 # find_calls.py
 # code based on graph.py <Ateuluz>
@@ -65,8 +66,13 @@ for i in range(len(diff_heap)):
     print(f"\t{diff_heap[i]}")
 
 # Graficar resultados
+cmp = ""
+if sys.argv[1] == "heap": cmp = "HEAP"
+elif sys.argv[1] == "arr": cmp = "ARR"
+    
 plt.figure(figsize=(10, 6))
 for algo, times in results.items():
+    if algo[:len(cmp)] != cmp: continue
     if len(times) == len(n_values):  # Evita errores si alguna lista está desalineada
         plt.plot(n_values, times, marker='o', label=algo)
 

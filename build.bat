@@ -32,7 +32,8 @@ REM —— Ejecución y registro de salida ——
 echo Running %TARGET% and logging output to log.txt...
 %TARGET% > log.txt
 python %GRAPH%
-python %FINDS%
+python %FINDS% heap
+python %FINDS% arr
 
 echo.
 echo Build complete. Run %TARGET% to execute your experiments.

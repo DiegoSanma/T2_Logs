@@ -11,6 +11,7 @@ REM —— Lista de fuentes y nombre del ejecutable ——
 set "SRCS=geometry.cpp union_find.cpp utils.cpp kruskal.cpp main.cpp"
 set "TARGET=experiments.exe"
 set "GRAPH=graphs.py"
+set "FINDS=find_calls.py"
 
 REM —— Limpieza ——
 echo Cleaning old artifacts...
@@ -31,6 +32,7 @@ REM —— Ejecución y registro de salida ——
 echo Running %TARGET% and logging output to log.txt...
 %TARGET% > log.txt
 python %GRAPH%
+python %FINDS%
 
 echo.
 echo Build complete. Run %TARGET% to execute your experiments.

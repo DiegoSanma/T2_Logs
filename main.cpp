@@ -109,6 +109,17 @@ int main() {
         }
         std::cout << '\n';
     }
+    
+    // 4) Print per-N breakdown
+    for (int N : NS) {
+        std::cout << "=== Finds for N = " << N << " ===\n";
+        for (auto& exp : experiments) {
+            auto& finds = finds_by_N[N][exp.name][0];
+            std::cout << exp.name
+            << ": find calls: " << finds << " \n";
+        }
+        std::cout << '\n';
+    }
 
     // 3) Print overall averages
     std::cout << "=== Overall Averages ===\n";
@@ -116,21 +127,10 @@ int main() {
         long long sum = std::accumulate(times.begin(), times.end(), 0LL);
         double avg = double(sum) / times.size();
         std::cout << label
-                  << ": ran " << times.size()
-                  << " times, avg = " << avg << " ms\n";
-                }
-    std::cout << '\n';
-
-    // 4) Print per-N breakdown
-    for (int N : NS) {
-        std::cout << "=== Results for N = " << N << " ===\n";
-        for (auto& exp : experiments) {
-            auto& finds = finds_by_N[N][exp.name][0];
-            std::cout << exp.name
-                      << ": find calls: " << finds << " \n";
-        }
-        std::cout << '\n';
+                    << ": ran " << times.size()
+                    << " times, avg = " << avg << " ms\n";
     }
-
+    std::cout << '\n';
+    
     return 0;
 }

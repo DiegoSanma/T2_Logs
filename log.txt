@@ -1,4 +1,4 @@
-Total elapsed time: 16148 ms
+Total elapsed time: 18940 ms
 
 === Results for N = 32 ===
 ARR: ran 5 times, avg = 0 ms
@@ -9,96 +9,96 @@ HEAP_OPT: ran 5 times, avg = 0 ms
 === Results for N = 64 ===
 ARR: ran 5 times, avg = 0 ms
 HEAP: ran 5 times, avg = 0 ms
-ARR_OPT: ran 5 times, avg = 0 ms
+ARR_OPT: ran 5 times, avg = 1 ms
 HEAP_OPT: ran 5 times, avg = 0 ms
 
 === Results for N = 128 ===
-ARR: ran 5 times, avg = 0.6 ms
-HEAP: ran 5 times, avg = 0 ms
-ARR_OPT: ran 5 times, avg = 0 ms
-HEAP_OPT: ran 5 times, avg = 0 ms
+ARR: ran 5 times, avg = 0.4 ms
+HEAP: ran 5 times, avg = 0.2 ms
+ARR_OPT: ran 5 times, avg = 0.4 ms
+HEAP_OPT: ran 5 times, avg = 0.4 ms
 
 === Results for N = 256 ===
-ARR: ran 5 times, avg = 1.2 ms
-HEAP: ran 5 times, avg = 1.4 ms
-ARR_OPT: ran 5 times, avg = 1.2 ms
+ARR: ran 5 times, avg = 4.4 ms
+HEAP: ran 5 times, avg = 2.2 ms
+ARR_OPT: ran 5 times, avg = 3.2 ms
 HEAP_OPT: ran 5 times, avg = 1.4 ms
 
 === Results for N = 512 ===
-ARR: ran 5 times, avg = 9.8 ms
-HEAP: ran 5 times, avg = 1.8 ms
-ARR_OPT: ran 5 times, avg = 12 ms
-HEAP_OPT: ran 5 times, avg = 0 ms
+ARR: ran 5 times, avg = 16 ms
+HEAP: ran 5 times, avg = 5.2 ms
+ARR_OPT: ran 5 times, avg = 15.4 ms
+HEAP_OPT: ran 5 times, avg = 6.2 ms
 
 === Results for N = 1024 ===
-ARR: ran 5 times, avg = 42.6 ms
-HEAP: ran 5 times, avg = 19 ms
-ARR_OPT: ran 5 times, avg = 43.8 ms
-HEAP_OPT: ran 5 times, avg = 21 ms
+ARR: ran 5 times, avg = 66.6 ms
+HEAP: ran 5 times, avg = 22.2 ms
+ARR_OPT: ran 5 times, avg = 61.6 ms
+HEAP_OPT: ran 5 times, avg = 25.6 ms
 
 === Results for N = 2048 ===
-ARR: ran 5 times, avg = 195.6 ms
-HEAP: ran 5 times, avg = 80.2 ms
-ARR_OPT: ran 5 times, avg = 202 ms
-HEAP_OPT: ran 5 times, avg = 72.2 ms
+ARR: ran 5 times, avg = 257.4 ms
+HEAP: ran 5 times, avg = 82.6 ms
+ARR_OPT: ran 5 times, avg = 271 ms
+HEAP_OPT: ran 5 times, avg = 87.4 ms
 
 === Results for N = 4096 ===
-ARR: ran 5 times, avg = 954.2 ms
-HEAP: ran 5 times, avg = 289.2 ms
-ARR_OPT: ran 5 times, avg = 897 ms
-HEAP_OPT: ran 5 times, avg = 285.4 ms
+ARR: ran 5 times, avg = 1083.4 ms
+HEAP: ran 5 times, avg = 331.4 ms
+ARR_OPT: ran 5 times, avg = 1020.4 ms
+HEAP_OPT: ran 5 times, avg = 303.4 ms
 
-=== Overall Averages ===
-ARR: ran 40 times, avg = 150.5 ms
-ARR_OPT: ran 40 times, avg = 144.5 ms
-HEAP: ran 40 times, avg = 48.95 ms
-HEAP_OPT: ran 40 times, avg = 47.5 ms
-
-=== Results for N = 32 ===
+=== Finds for N = 32 ===
 ARR: find calls: 536 
 HEAP: find calls: 536 
 ARR_OPT: find calls: 435 
 HEAP_OPT: find calls: 435 
 
-=== Results for N = 64 ===
+=== Finds for N = 64 ===
 ARR: find calls: 1056 
 HEAP: find calls: 1056 
 ARR_OPT: find calls: 869 
 HEAP_OPT: find calls: 869 
 
-=== Results for N = 128 ===
+=== Finds for N = 128 ===
 ARR: find calls: 3856 
 HEAP: find calls: 3856 
 ARR_OPT: find calls: 2760 
 HEAP_OPT: find calls: 2760 
 
-=== Results for N = 256 ===
+=== Finds for N = 256 ===
 ARR: find calls: 5707 
 HEAP: find calls: 5707 
 ARR_OPT: find calls: 4150 
 HEAP_OPT: find calls: 4150 
 
-=== Results for N = 512 ===
+=== Finds for N = 512 ===
 ARR: find calls: 12363 
 HEAP: find calls: 12363 
 ARR_OPT: find calls: 8648 
 HEAP_OPT: find calls: 8648 
 
-=== Results for N = 1024 ===
+=== Finds for N = 1024 ===
 ARR: find calls: 22548 
 HEAP: find calls: 22548 
 ARR_OPT: find calls: 15831 
 HEAP_OPT: find calls: 15831 
 
-=== Results for N = 2048 ===
+=== Finds for N = 2048 ===
 ARR: find calls: 56812 
 HEAP: find calls: 56812 
 ARR_OPT: find calls: 37236 
 HEAP_OPT: find calls: 37236 
 
-=== Results for N = 4096 ===
+=== Finds for N = 4096 ===
 ARR: find calls: 131417 
 HEAP: find calls: 131417 
 ARR_OPT: find calls: 80906 
 HEAP_OPT: find calls: 80906 
+
+=== Overall Averages ===
+ARR: ran 40 times, avg = 178.525 ms
+ARR_OPT: ran 40 times, avg = 171.625 ms
+HEAP: ran 40 times, avg = 55.475 ms
+HEAP_OPT: ran 40 times, avg = 53.05 ms
 

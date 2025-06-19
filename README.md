@@ -25,4 +25,11 @@ Medimos el tiempo de ejecución para distintos tamaños de entrada y comparamos 
 └── README.md                      # Este documento
 ```
 
-Para ejecutar el código, se debe primero compilar el programa. Para esto, se debe realizar una llamada a **./build.bat** que creará el ejecutable "experiments.exe". Luego, en la terminal se debe ejecutarlo para obtener los resultados correpsondientes. Estos resultados se encontrarán dentro de un logfile, de nombre **log.txt**
+## Ejecución de experimentos
+
+### Windows
+
+Para ejecutar el código, se debe primero compilar el programa. Para esto, se debe realizar una llamada a **./build.bat** que creará el ejecutable "experiments.exe", lo
+corerrá y almacenará resultados, generando los gráficos correspondientes en secuencia. Para ver los resultados numericos, se puede consultar el archivo **log.txt**.
+
+### Linux

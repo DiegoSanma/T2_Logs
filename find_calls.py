@@ -31,7 +31,6 @@ for line in lines:
         break
 
     match_n = pattern_n.match(line)
-    print("Processing line:", line, "Match N:", match_n)
     if match_n:
         current_n = int(match_n.group(1))
         n_values.append(current_n)

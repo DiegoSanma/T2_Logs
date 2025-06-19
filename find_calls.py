@@ -67,8 +67,9 @@ for i in range(len(diff_heap)):
 
 # Graficar resultados
 cmp = ""
-if sys.argv[1] == "heap": cmp = "HEAP"
-elif sys.argv[1] == "arr": cmp = "ARR"
+if len(sys.argv) == 2:
+    if sys.argv[1] == "heap": cmp = "HEAP"
+    elif sys.argv[1] == "arr": cmp = "ARR"
     
 plt.figure(figsize=(10, 6))
 for algo, times in results.items():
@@ -78,7 +79,7 @@ for algo, times in results.items():
 
 plt.xlabel('Tamaño de entrada N')
 plt.ylabel('Llamadas a find')
-plt.title('Comparación de algoritmos con y sin optimización según tiempo por tamaño de entrada')
+plt.title('Comparación de algoritmos con y sin optimización según llamadas a find por tamaño de entrada')
 plt.legend()
 plt.grid(True)
 plt.tight_layout()

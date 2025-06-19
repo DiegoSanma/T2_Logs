@@ -33,3 +33,16 @@ Para ejecutar el código, se debe primero compilar el programa. Para esto, se de
 corerrá y almacenará resultados, generando los gráficos correspondientes en secuencia. Para ver los resultados numericos, se puede consultar el archivo **log.txt**.
 
 ### Linux
+Para ejecutar el codigo, se debe primero compilar el programa. Para esto, se debe dar permisos de ejecucion al archivo run.sh, esto se puede hacer ejecutando el siguiente comando
+```sh
+chmod 777 run.sh
+```
+Luego se debe ejecutar este archivo para crear el ejecutable llamado experiments, que ejecutara el codigo y printeara los resultados en consola.
+```sh
+./experiments
+```
+y si se desea generar los graficos se debe guardar los resultados al archivo log.txt y luego ejecutar en un ambiente de python con numpy y matplotlib instalado el archivo graph.py, esto con el siguiente comando
+```sh
+./experiments > log.txt
+python graphs.py
+```
